@@ -2,6 +2,7 @@ import "dotenv/config"
 import express from "express"
 import cors from "cors"
 import { clerkMiddleware } from "@clerk/express";
+import keepAliveCron from "./lib/cron";
 
 import { getEnv } from "./lib/env";
 import { clerkWebhookHandler } from "./webhook/clerk";
@@ -46,4 +47,7 @@ if (fs.existsSync(publicDir)) {
 
 app.listen(env.PORT,()=>{
     console.log(`Server is up and running on port ${env.PORT}`)
+    if (env.NODE_ENV === "production") {
+        keepAliveCron.start();
+      }
 })
